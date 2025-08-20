@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحقق من حالة الحساب</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, #0d0d0d, #330000);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+    .card {
+      width: 420px;
+      background: rgba(20, 20, 20, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 0, 0, 0.4);
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+    }
+    h2 {
+      margin-bottom: 15px;
+      color: #ff3333;
+      text-shadow: 0 0 8px #ff0000;
+    }
+    input {
+      width: 90%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      border: 1px solid #ff3333;
+      text-align: center;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      outline: none;
+    }
+    input:focus {
+      border-color: #ff0000;
+      box-shadow: 0 0 10px #ff0000;
+    }
+    .btn {
+      width: 95%;
+      padding: 12px;
+      margin: 8px auto;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #ff0000;
+      color: #fff;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #ff0000;
+    }
+    .info, .error {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: none;
+      text-align: left;
+      line-height: 1.6;
+    }
+    .info {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #0f0;
+    }
+    .error {
+      background: rgba(255, 0, 0, 0.15);
+      border: 1px solid #f33;
+      color: #ff9999;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🔍 تحقق من حالة الحساب</h2>
+    <input type="text" id="uid" placeholder="ادخل UID">
+    <button class="btn" onclick="fetchData()">عرض الحالة</button>
+    <button class="btn" onclick="location.href='raouf.html'">⬅ رجوع للقائمة</button>
+
+    <div class="info" id="infoBox"></div>
+    <div class="error" id="errorBox"></div>
+  </div>
+
+  <script>
+    async function fetchData() {
+      const uid = document.getElementById("uid").value.trim();
+      const infoBox = document.getElementById("infoBox");
+      const errorBox = document.getElementById("errorBox");
+
+      infoBox.style.display = "none";
+      errorBox.style.display = "none";
+
+      if (!uid) {
+        errorBox.innerText = "⚠️ الرجاء إدخال UID";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      try {
+        const url = `https://cors-anywhere.herokuapp.com/https://api-check-gpl.vercel.app/check?uid=${uid}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("API Error");
+
+        const data = await res.json();
+        infoBox.innerHTML = `
+          ✅ الحالة: ${data["✅ status"] || "❌ خطأ"}<br>
+          🆔 UID: ${data["🆔 UID"] || "❌"}<br>
+          🏷️ الاسم: ${data["🏷️ Nickname"] || "❌"}<br>
+          🌍 المنطقة: ${data["🌍 Region"] || "❌"}<br>
+          🔒 الحساب: ${data["🔒 Account"] || "❌"}<br>
+          ⏳ مدة الحظر: ${data["⏳ Duration"] || "❌"}<br>
+          📊 محظور؟: ${data["📊 Banned?"] ? "🚫 نعم" : "✅ لا"}<br>
+          💎 ${data["💎 Powered by"] || ""}
+        `;
+        infoBox.style.display = "block";
+
+      } catch (e) {
+        errorBox.innerText = "❌ خطأ في جلب البيانات";
+        errorBox.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>

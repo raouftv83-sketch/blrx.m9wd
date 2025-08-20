@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLRX M9WD</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, #000000, #1a1a1a, #2c2c2c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .container {
+      text-align: center;
+      background: #111;
+      padding: 40px 30px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(255,0,0,0.25);
+      border: 1px solid #900;
+      animation: fadeIn 1.2s ease-in-out;
+      max-width: 430px;
+    }
+
+    .logo {
+      font-size: 34px;
+      margin-bottom: 12px;
+      animation: pulse 2.5s infinite;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #ff3333, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 22px;
+    }
+
+    p {
+      margin-bottom: 25px;
+      font-size: 15px;
+      color: #ddd;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 11px 26px;
+      background: linear-gradient(45deg, #ff0000, #b30000);
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      border-radius: 10px;
+      transition: 0.3s;
+      box-shadow: 0 3px 10px rgba(255,0,0,0.25);
+    }
+
+    .btn:hover {
+      background: linear-gradient(45deg, #cc0000, #800000);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,0,0,0.35);
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
+      border-top: 1px solid #333;
+      padding-top: 8px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(40px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes pulse {
+      0%, 100% {transform: scale(1);}
+      50% {transform: scale(1.1);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">🎮</div>
+    <h1>موقع BLRX M9WD</h1>
+    <div class="subtitle">مرحباً بك في عالم الألعاب</div>
+    <p>قم بتسجيل الدخول للوصول إلى حسابك وعرض بياناتك.</p>
+    <a href="login.html" class="btn">🚀 تسجيل الدخول</a>
+    <div class="footer">المطور من قبل Rex Raouf 🇩🇿</div>
+  </div>
+</body>
+</html>
