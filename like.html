@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحقق من حالة الحساب</title>
+  <style>
+    /* خلفية متحركة */
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, #000000, #1a0000, #330000);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* تأثير نجوم */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("https://www.transparenttextures.com/patterns/stardust.png");
+      opacity: 0.2;
+      animation: moveStars 60s linear infinite;
+    }
+    @keyframes moveStars {
+      from {background-position: 0 0;}
+      to {background-position: 1000px 1000px;}
+    }
+
+    /* الكارد */
+    .card {
+      position: relative;
+      width: 420px;
+      background: rgba(20, 20, 20, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 0, 0, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+      text-align: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h2 {
+      color: #ff1a1a;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #ff0000;
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 15px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 1px solid rgba(255,0,0,0.5);
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: #ff0000;
+      box-shadow: 0 0 12px #ff0000;
+    }
+
+    .btn {
+      display: block;
+      width: 95%;
+      padding: 12px;
+      margin: 10px auto;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #ff0000;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: 0.5s;
+    }
+    .btn:hover::before {
+      left: 100%;
+    }
+    .btn:hover {
+      box-shadow: 0 0 15px #ff1a1a, 0 0 30px #ff1a1a;
+      transform: scale(1.05);
+    }
+
+    .info, .error {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 15px;
+      display: none;
+    }
+    .info {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #0f0;
+    }
+    .error {
+      background: rgba(255, 0, 0, 0.15);
+      border: 1px solid #f33;
+      color: #ff6666;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🔍 تحقق من حالة الحساب</h2>
+    <input type="text" id="uid" placeholder="ادخل UID">
+    <button class="btn" onclick="fetchData()">عرض الحالة</button>
+
+    <div class="info" id="infoBox"></div>
+    <div class="error" id="errorBox"></div>
+  </div>
+
+  <script>
+    async function fetchData() {
+      const uid = document.getElementById("uid").value.trim();
+      const infoBox = document.getElementById("infoBox");
+      const errorBox = document.getElementById("errorBox");
+
+      infoBox.style.display = "none";
+      errorBox.style.display = "none";
+
+      if (!uid) {
+        errorBox.innerText = "⚠️ الرجاء إدخال UID";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://iren-check-ban-x7-orcin.vercel.app/bancheck?key=IREN&uid=${uid}`);
+        if (!res.ok) throw new Error("API Error");
+
+        const data = await res.json();
+        infoBox.innerHTML = `
+          🆔 UID: ${data.uid || "-"}<br>
+          👤 الاسم: ${data.nickname || "غير معروف"}<br>
+          📌 الحالة: ${data.is_banned ? "🚫 محظور" : "✅ غير محظور"}<br>
+          ⏳ مدة الحظر: ${data.ban_period > 0 ? data.ban_period+" يوم" : "لا يوجد"}
+        `;
+        infoBox.style.display = "block";
+
+      } catch (e) {
+        errorBox.innerText = "❌ خطأ في جلب البيانات";
+        errorBox.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
